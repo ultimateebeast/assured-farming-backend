@@ -222,7 +222,6 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
-
 # -------------------------------------------------------------------
 # CORS SETTINGS (for React Frontend)
 # -------------------------------------------------------------------
@@ -232,6 +231,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+
+    # Production frontend (Vercel)
+    "https://assured-farming-frontend.vercel.app",
 ]
 
 # Optional for development only:
