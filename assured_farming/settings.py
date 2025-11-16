@@ -16,13 +16,60 @@ env = environ.Env(
 environ.Env.read_env(env_file=os.path.join(BASE_DIR, '.env'))
 
 # -------------------------------------------------------------------
-# SECURITY
+# SECURITY (use envs; supports both local .env and production)
 # -------------------------------------------------------------------
 
-SECRET_KEY = env('DJANGO_SECRET_KEY', default='dev-secret')
+# SECRET: prefer SECRET_KEY for prod (Render), fallback to DJANGO_SECRET_KEY for dev
+SECRET_KEY = env('SECRET_KEY', default=env('DJANGO_SECRET_KEY', default='dev-secret'))
+
+# DEBUG: keep using DJANGO_DEBUG from your .env for dev; set DEBUG=False in Render
 DEBUG = env.bool('DJANGO_DEBUG', default=True)
 
-ALLOWED_HOSTS = ["*"]
+# ALLOWED HOSTS: keep permissive for now or set via env in Render
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', "*").split(",")
+
+# -------------------------------------------------------------------
+# DATABASE CONFIGURATION
+# -------------------------------------------------------------------
+
+# If a DATABASE_URL is provided (Render injects this), prefer it.
+# Otherwise fall back to your existing USE_POSTGRESQL / POSTGRES_* settings.
+import dj_database_url  # <-- ensure dj-database-url is in requirements.txt
+
+DATABASE_URL = os.environ.get('DATABASE_URL', None)
+
+if DATABASE_URL:
+    # Use the provided DATABASE_URL (recommended for Render production)
+    DATABASES = {
+        'default': dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+        )
+    }
+else:
+    # Existing behavior: use POSTGRES_* env settings if USE_POSTGRESQL enabled,
+    # otherwise default to local sqlite.
+    USE_POSTGRESQL = env.bool('USE_POSTGRESQL', default=False)
+
+    if USE_POSTGRESQL:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': env('POSTGRES_DB', default='assured_farming'),
+                'USER': env('POSTGRES_USER', default='postgres'),
+                'PASSWORD': env('POSTGRES_PASSWORD', default='postgres'),
+                'HOST': env('POSTGRES_HOST', default='db'),
+                'PORT': env('POSTGRES_PORT', default='5432'),
+            }
+        }
+    else:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
+
 
 # -------------------------------------------------------------------
 # APPLICATIONS
