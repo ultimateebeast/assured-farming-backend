@@ -24,11 +24,10 @@ class ListingSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         request = self.context['request']
-        # Extract crop_name if provided (do before super().create)
-        crop_name = validated_data.pop('crop_name', None)
-        # If crop not set via crop_id and crop_name provided, get_or_create it
-        if not validated_data.get('crop') and crop_name:
-            crop_obj, _ = Crop.objects.get_or_create(name=crop_name.strip(), defaults={
+        # Read crop_name from initial_data to be robust with multipart/form-data
+        crop_name = self.initial_data.get('crop_name') or validated_data.pop('crop_name', None)
+        if crop_name and not validated_data.get('crop'):
+            crop_obj, _ = Crop.objects.get_or_create(name=str(crop_name).strip(), defaults={
                 'variety': '',
                 'unit': 'kg',
                 'typical_price_range': ''
@@ -40,10 +39,12 @@ class ListingSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         # Ensure either crop or crop_name is provided
-        if not data.get('crop') and not self.initial_data.get('crop_name'):
+        crop_name = self.initial_data.get('crop_name')
+        if not data.get('crop') and not crop_name:
             raise serializers.ValidationError({'crop': 'Provide either crop_id or crop_name.'})
 
-        # reuse model clean rules
-        instance = Listing(**{**data, 'farmer': self.context['request'].user})
+        # Build a temporary instance for model.clean without unknown fields
+        temp = {k: v for k, v in data.items() if k != 'crop_name'}
+        instance = Listing(**{**temp, 'farmer': self.context['request'].user, 'crop': data.get('crop')})
         instance.clean()
         return data
