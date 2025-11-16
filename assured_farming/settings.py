@@ -226,18 +226,15 @@ SIMPLE_JWT = {
 # CORS SETTINGS (for React Frontend)
 # -------------------------------------------------------------------
 
+# settings.py
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-
-    # Production frontend (Vercel)
     "https://assured-farming-frontend.vercel.app",
 ]
 
-# Optional for development only:
+# If using cookie/session auth:
 CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = ["https://assured-farming-frontend.vercel.app"]
+
 
 # -------------------------------------------------------------------
 # LOGGING
