@@ -227,13 +227,21 @@ SIMPLE_JWT = {
 # -------------------------------------------------------------------
 
 # settings.py
+
 CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
     "https://assured-farming-frontend.vercel.app",
 ]
 
-# If using cookie/session auth:
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = ["https://assured-farming-frontend.vercel.app"]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://assured-farming-frontend.vercel.app",
+]
+
 
 
 # -------------------------------------------------------------------
