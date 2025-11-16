@@ -20,11 +20,15 @@ class PriceProposalSerializer(serializers.ModelSerializer):
 class ContractSerializer(serializers.ModelSerializer):
     listing = ListingSerializer(read_only=True)
     listing_id = serializers.PrimaryKeyRelatedField(queryset=Listing.objects.all(), source='listing', write_only=True)
+    proposals = PriceProposalSerializer(many=True, read_only=True)
 
     class Meta:
         model = Contract
-        fields = ('id', 'listing', 'listing_id', 'buyer', 'agreed_quantity', 'price_per_unit', 'total_value', 'start_date', 'end_date', 'status', 'signed_at')
-        read_only_fields = ('id', 'buyer', 'status', 'signed_at')
+        fields = (
+            'id', 'listing', 'listing_id', 'buyer', 'agreed_quantity', 'price_per_unit',
+            'total_value', 'start_date', 'end_date', 'status', 'signed_at', 'proposals'
+        )
+        read_only_fields = ('id', 'buyer', 'status', 'signed_at', 'proposals')
 
     def create(self, validated_data):
         from decimal import Decimal, InvalidOperation
