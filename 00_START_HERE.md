@@ -237,7 +237,7 @@ assured_farming/
 │
 ├── Django Project
 │   ├── manage.py
-│   ├── requirements.txt
+│   ├── requirements-prod.txt
 │   ├── assured_farming/
 │   │   ├── settings.py (Django config)
 │   │   ├── urls.py (Project routes)

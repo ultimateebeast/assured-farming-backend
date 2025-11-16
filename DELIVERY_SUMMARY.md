@@ -125,8 +125,7 @@ API Endpoints: 30+
 • Indexes on frequently queried fields (crop, location, harvest_date)
 • GIN index on audit log metadata (JSON)
 
-============================================================================= 2. HOW TO START TESTING
-=============================================================================
+# ============================================================================= 2. HOW TO START TESTING
 
 QUICK START (5 minutes):
 
@@ -159,8 +158,7 @@ Expected results:
 ✅ API endpoints respond with 200 status
 ✅ Admin interface loads
 
-============================================================================= 3. API ENDPOINTS (30+) - READY TO USE
-=============================================================================
+# ============================================================================= 3. API ENDPOINTS (30+) - READY TO USE
 
 ACCOUNTS
 POST /api/v1/accounts/register/ - User registration
@@ -200,12 +198,11 @@ GET /api/v1/analytics/acceptance-rate/ - Acceptance rate
 ADMIN
 GET /admin/dashboard/ - Admin dashboard
 
-============================================================================= 4. FILE STRUCTURE SUMMARY
-=============================================================================
+# ============================================================================= 4. FILE STRUCTURE SUMMARY
 
 assured_farming/
 ├── manage.py # Django entry point
-├── requirements.txt # Python dependencies
+├── requirements-prod.txt # Python dependencies
 ├── Dockerfile # Container image
 ├── docker-compose.yml # Multi-container setup
 ├── entrypoint.sh # Container startup script
@@ -279,8 +276,7 @@ assured_farming/
 
 TOTAL: 100+ files, 23 models, 30+ endpoints, ~8,000 lines of code
 
-============================================================================= 5. KEY TECHNICAL FEATURES
-=============================================================================
+# ============================================================================= 5. KEY TECHNICAL FEATURES
 
 ARCHITECTURE HIGHLIGHTS:
 
@@ -332,8 +328,7 @@ ARCHITECTURE HIGHLIGHTS:
 - Indexes on frequently queried fields
 - GIN index on JSON metadata for fast searches
 
-============================================================================= 6. WHAT'S READY vs. WHAT'S NEXT
-=============================================================================
+# ============================================================================= 6. WHAT'S READY vs. WHAT'S NEXT
 
 FULLY TESTED & PRODUCTION-READY:
 ✅ User authentication and registration
@@ -361,8 +356,7 @@ OPTIONAL ENHANCEMENTS (not in MVP scope):
 ❌ Advanced analytics dashboard
 ❌ Rate limiting/throttling
 
-============================================================================= 7. NEXT STEPS FOR YOU
-=============================================================================
+# ============================================================================= 7. NEXT STEPS FOR YOU
 
 IMMEDIATE (Testing Phase - 30 minutes):
 
@@ -404,8 +398,7 @@ OPTIONAL ENHANCEMENTS (if time permits):
 12. Add real payment provider integration
 13. Build React frontend
 
-============================================================================= 8. SUCCESS CRITERIA - HOW TO VERIFY COMPLETION
-=============================================================================
+# ============================================================================= 8. SUCCESS CRITERIA - HOW TO VERIFY COMPLETION
 
 You'll know the project is successfully deployed when:
 
@@ -421,8 +414,7 @@ You'll know the project is successfully deployed when:
 ✅ Can create users, listings, and contracts via API
 ✅ Webhooks are handled idempotently
 
-============================================================================= 9. ESTIMATED PROJECT METRICS
-=============================================================================
+# ============================================================================= 9. ESTIMATED PROJECT METRICS
 
 Development Coverage:
 Backend Code: 100% ✅
@@ -450,8 +442,7 @@ Cache: ✅ Redis
 Async: ✅ Celery
 Admin: ✅ Configured
 
-============================================================================= 10. FINAL PROJECT STATUS
-=============================================================================
+# ============================================================================= 10. FINAL PROJECT STATUS
 
 🎉 PROJECT: 92% COMPLETE
 
@@ -472,8 +463,7 @@ RECOMMENDATION:
 → Ready to deploy to staging after tests pass
 → Production deployment requires real payment/SMS provider setup
 
-============================================================================= 11. SUPPORT & TROUBLESHOOTING
-=============================================================================
+# ============================================================================= 11. SUPPORT & TROUBLESHOOTING
 
 Need help? Check these files:
 
@@ -500,8 +490,7 @@ A: Refresh page, check urls.py routes
 Q: Celery tasks not running?
 A: Check docker-compose logs celery, verify redis
 
-============================================================================= 12. WHAT YOU'RE GETTING
-=============================================================================
+# ============================================================================= 12. WHAT YOU'RE GETTING
 
 This is NOT a tutorial project. This is a COMPLETE, PRODUCTION-READY
 Django REST Framework backend with:

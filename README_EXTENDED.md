@@ -259,7 +259,7 @@ assured_farming/
 ├── manage.py
 ├── Dockerfile
 ├── docker-compose.yml
-├── requirements.txt
+├── requirements-prod.txt
 ├── .env.example
 ├── README.md
 ├── pytest.ini

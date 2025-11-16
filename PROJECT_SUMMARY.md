@@ -158,7 +158,7 @@ assured_farming/
 ├── Dockerfile
 ├── docker-compose.yml
 ├── entrypoint.sh
-├── requirements.txt
+├── requirements-prod.txt
 ├── .env.example
 ├── .gitignore
 ├── README.md

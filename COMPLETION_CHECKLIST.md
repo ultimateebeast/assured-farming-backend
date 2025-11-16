@@ -17,7 +17,7 @@ Last Updated: Current Session
 - [x] ASGI configuration
 - [x] WSGI configuration
 - [x] URL routing (project-level urls.py)
-- [x] Requirements.txt with all dependencies
+- [x] requirements-prod.txt with all dependencies
 
 ### Celery & Async
 
@@ -371,7 +371,7 @@ Last Updated: Current Session
 
 ### PDF Generation
 
-- [x] WeasyPrint library (requirements.txt)
+- [x] WeasyPrint library (requirements-prod.txt)
 - [x] xhtml2pdf fallback (if WeasyPrint unavailable)
 - [x] HTML template (templates/contracts/contract_pdf.html)
   - Displays contract details in table format
@@ -594,7 +594,7 @@ Last Updated: Current Session
 
 - [x] Procfile (for Heroku deployment, if needed)
 - [x] .gitignore
-- [x] requirements.txt
+- [x] requirements-prod.txt
 
 ---
 

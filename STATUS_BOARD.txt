@@ -132,7 +132,7 @@
 │  PHASE 14: Utilities & Tools                  ✅ 100% Complete             │
 │  ├─ test.sh Script                            ✅ Done                       │
 │  ├─ Procfile                                  ✅ Done                       │
-│  ├─ requirements.txt                          ✅ Done                       │
+│  ├─ requirements-prod.txt                          ✅ Done                       │
 │  └─ Configuration Files                       ✅ Done                       │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘

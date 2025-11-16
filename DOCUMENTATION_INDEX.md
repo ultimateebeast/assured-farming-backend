@@ -105,14 +105,14 @@ Welcome! This file is your guide to navigating the complete Assured Farming proj
 
 ### Configuration Files
 
-| File                   | Purpose                             |
-| ---------------------- | ----------------------------------- |
-| **.env.example**       | Environment template - copy to .env |
-| **requirements.txt**   | Python dependencies                 |
-| **pytest.ini**         | Test configuration                  |
-| **Dockerfile**         | Container image definition          |
-| **docker-compose.yml** | Multi-container orchestration       |
-| **entrypoint.sh**      | Container startup script            |
+| File                      | Purpose                             |
+| ------------------------- | ----------------------------------- |
+| **.env.example**          | Environment template - copy to .env |
+| **requirements-prod.txt** | Python dependencies                 |
+| **pytest.ini**            | Test configuration                  |
+| **Dockerfile**            | Container image definition          |
+| **docker-compose.yml**    | Multi-container orchestration       |
+| **entrypoint.sh**         | Container startup script            |
 
 ### Django Project Structure
 

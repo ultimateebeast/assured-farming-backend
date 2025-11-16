@@ -86,7 +86,7 @@ source venv/bin/activate
 
 ## Install dependencies
 
-pip install -r requirements.txt
+pip install -r requirements-prod.txt
 
 ## Copy environment file
 
@@ -572,7 +572,7 @@ git push origin main
 - Django Settings ......... assured_farming/settings.py
 - Project URLs ........... assured_farming/urls.py
 - Celery Config .......... assured_farming/celery.py
-- Requirements ........... requirements.txt
+- Requirements ........... requirements-prod.txt
 - Environment Template ... .env.example
 
 ## Useful Aliases (add to .bashrc or .zshrc)
