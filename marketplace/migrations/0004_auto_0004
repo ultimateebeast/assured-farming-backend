@@ -1,0 +1,9 @@
+from django.db import migrations
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('marketplace', '0003_alter_listing_created_at_alter_listing_farmer_and_more'),
+    ]
+
+    operations = []
