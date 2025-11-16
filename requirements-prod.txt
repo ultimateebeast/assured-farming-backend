@@ -2,10 +2,14 @@ Django>=4.2
 djangorestframework
 drf-spectacular
 django-environ
-dj-database-url
-django-cors-headers
 djangorestframework-simplejwt
-psycopg2-binary
+django-cors-headers
 whitenoise
 gunicorn
-python-dotenv
+psycopg2-binary
+dj-database-url
+django-storages     # optional if using S3
+python-dotenv       # optional
+celery              # if you're using celery in prod
+redis               # if you rely on redis client in prod
+python-json-logger  # optional (if you used it locally)
