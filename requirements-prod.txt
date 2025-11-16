@@ -1,7 +1,7 @@
-Django>=4.2
+Django>=4.2,<6
 djangorestframework
 drf-spectacular
-corsheaders
+django-cors-headers
 gunicorn
 dj-database-url
 whitenoise
