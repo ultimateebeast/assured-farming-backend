@@ -6,7 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /usr/src/app
 
-# Install system deps needed to build pycairo / weasyprint / xhtml2pdf and common Python build tools
+# System dependencies
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        build-essential \
@@ -30,17 +30,17 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt ./
-
-# install production dependencies only to keep image small and compatible
+# Copy and install production requirements
 COPY requirements-prod.txt ./
 RUN pip install --upgrade pip setuptools wheel \
     && pip install --no-cache-dir -r requirements-prod.txt
 
-
+# Copy app source (after installing deps for layer caching)
 COPY . /usr/src/app/
 
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Copy start script into image and ensure executable
+COPY start.sh /usr/src/app/start.sh
+RUN chmod +x /usr/src/app/start.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+# Use start.sh as the container CMD
+CMD ["./start.sh"]
