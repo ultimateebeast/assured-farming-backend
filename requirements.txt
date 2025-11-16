@@ -145,3 +145,5 @@ whitenoise==6.11.0
 widgetsnbextension==4.0.14
 dj-database-url
 gunicorn
+whitenoise
+psycopg2-binary  

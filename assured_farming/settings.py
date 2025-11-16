@@ -1,6 +1,9 @@
+# assured_farming/settings.py
 import os
 from pathlib import Path
 import environ
+import dj_database_url
+from datetime import timedelta
 
 # -------------------------------------------------------------------
 # BASE CONFIGURATION
@@ -12,7 +15,7 @@ env = environ.Env(
     DEBUG=(bool, False),
 )
 
-# Load environment variables from .env file at project root
+# Load environment variables from .env file at project root (dev only)
 environ.Env.read_env(env_file=os.path.join(BASE_DIR, '.env'))
 
 # -------------------------------------------------------------------
@@ -20,56 +23,13 @@ environ.Env.read_env(env_file=os.path.join(BASE_DIR, '.env'))
 # -------------------------------------------------------------------
 
 # SECRET: prefer SECRET_KEY for prod (Render), fallback to DJANGO_SECRET_KEY for dev
-SECRET_KEY = env('SECRET_KEY', default=env('DJANGO_SECRET_KEY', default='dev-secret'))
+SECRET_KEY = os.environ.get('SECRET_KEY') or env('DJANGO_SECRET_KEY', default='dev-secret')
 
-# DEBUG: keep using DJANGO_DEBUG from your .env for dev; set DEBUG=False in Render
-DEBUG = env.bool('DJANGO_DEBUG', default=True)
+# DEBUG: prefer explicit DEBUG env in production; keep DJANGO_DEBUG for local dev
+DEBUG = os.environ.get('DEBUG', os.environ.get('DJANGO_DEBUG', "True")) in ("True", "true", "1")
 
-# ALLOWED HOSTS: keep permissive for now or set via env in Render
+# ALLOWED HOSTS (comma separated in env)
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', "*").split(",")
-
-# -------------------------------------------------------------------
-# DATABASE CONFIGURATION
-# -------------------------------------------------------------------
-
-# If a DATABASE_URL is provided (Render injects this), prefer it.
-# Otherwise fall back to your existing USE_POSTGRESQL / POSTGRES_* settings.
-import dj_database_url  # <-- ensure dj-database-url is in requirements.txt
-
-DATABASE_URL = os.environ.get('DATABASE_URL', None)
-
-if DATABASE_URL:
-    # Use the provided DATABASE_URL (recommended for Render production)
-    DATABASES = {
-        'default': dj_database_url.parse(
-            DATABASE_URL,
-            conn_max_age=600,
-        )
-    }
-else:
-    # Existing behavior: use POSTGRES_* env settings if USE_POSTGRESQL enabled,
-    # otherwise default to local sqlite.
-    USE_POSTGRESQL = env.bool('USE_POSTGRESQL', default=False)
-
-    if USE_POSTGRESQL:
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': env('POSTGRES_DB', default='assured_farming'),
-                'USER': env('POSTGRES_USER', default='postgres'),
-                'PASSWORD': env('POSTGRES_PASSWORD', default='postgres'),
-                'HOST': env('POSTGRES_HOST', default='db'),
-                'PORT': env('POSTGRES_PORT', default='5432'),
-            }
-        }
-    else:
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': BASE_DIR / 'db.sqlite3',
-            }
-        }
-
 
 # -------------------------------------------------------------------
 # APPLICATIONS
@@ -119,7 +79,6 @@ TEMPLATES = [
     },
 ]
 
-
 # -------------------------------------------------------------------
 # MIDDLEWARE
 # -------------------------------------------------------------------
@@ -127,6 +86,7 @@ TEMPLATES = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',   # Must be placed before CommonMiddleware
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # serve static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -146,28 +106,35 @@ WSGI_APPLICATION = 'assured_farming.wsgi.application'
 # -------------------------------------------------------------------
 # DATABASE CONFIGURATION
 # -------------------------------------------------------------------
+# Prefer DATABASE_URL (Render injects this). Fallback to USE_POSTGRESQL / POSTGRES_* for dev.
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
-# Use SQLite for development if PostgreSQL is not available
-USE_POSTGRESQL = env.bool('USE_POSTGRESQL', default=False)
-
-if USE_POSTGRESQL:
+if DATABASE_URL:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': env('POSTGRES_DB', default='assured_farming'),
-            'USER': env('POSTGRES_USER', default='postgres'),
-            'PASSWORD': env('POSTGRES_PASSWORD', default='postgres'),
-            'HOST': env('POSTGRES_HOST', default='db'),
-            'PORT': env('POSTGRES_PORT', default='5432'),
-        }
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
     }
 else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+    # Use SQLite for development unless explicitly opting into POSTGRES locally
+    USE_POSTGRESQL = env.bool('USE_POSTGRESQL', default=False)
+
+    if USE_POSTGRESQL:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': env('POSTGRES_DB', default='assured_farming'),
+                'USER': env('POSTGRES_USER', default='postgres'),
+                'PASSWORD': env('POSTGRES_PASSWORD', default='postgres'),
+                'HOST': env('POSTGRES_HOST', default='db'),
+                'PORT': env('POSTGRES_PORT', default='5432'),
+            }
         }
-    }
+    else:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 
 # -------------------------------------------------------------------
 # AUTH / USERS
@@ -197,6 +164,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -244,9 +212,8 @@ SPECTACULAR_SETTINGS = {
 }
 
 # -------------------------------------------------------------------
-# SIMPLE JWT SETTINGS (OPTIONAL TUNING)
+# SIMPLE JWT SETTINGS
 # -------------------------------------------------------------------
-from datetime import timedelta
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
@@ -269,10 +236,9 @@ CORS_ALLOWED_ORIGINS = [
 
 # Optional for development only:
 CORS_ALLOW_CREDENTIALS = True
-# CORS_ALLOW_ALL_ORIGINS = True  # Uncomment only if debugging frontend issues
 
 # -------------------------------------------------------------------
-# LOGGING (optional basic setup)
+# LOGGING
 # -------------------------------------------------------------------
 
 LOGGING = {
