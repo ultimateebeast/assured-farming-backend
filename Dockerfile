@@ -32,9 +32,11 @@ RUN apt-get update \
 
 COPY requirements.txt ./
 
-# Upgrade pip and install Python deps
+# install production dependencies only to keep image small and compatible
+COPY requirements-prod.txt ./
 RUN pip install --upgrade pip setuptools wheel \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir -r requirements-prod.txt
+
 
 COPY . /usr/src/app/
 
