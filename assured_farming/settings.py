@@ -110,6 +110,11 @@ WSGI_APPLICATION = 'assured_farming.wsgi.application'
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 if DATABASE_URL:
+    # allow forcing SSL requirement via env; append if missing
+    ssl_require = os.environ.get('DATABASE_SSL_REQUIRE', 'true').lower() in ('1','true','yes')
+    if ssl_require and 'sslmode=' not in DATABASE_URL:
+        sep = '&' if '?' in DATABASE_URL else '?'
+        DATABASE_URL = f"{DATABASE_URL}{sep}sslmode=require"
     DATABASES = {
         'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
     }
@@ -135,6 +140,7 @@ else:
                 'NAME': BASE_DIR / 'db.sqlite3',
             }
         }
+
 
 # -------------------------------------------------------------------
 # AUTH / USERS
