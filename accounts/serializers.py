@@ -15,7 +15,7 @@ class FarmerProfileSerializer(serializers.ModelSerializer):
 class BuyerProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = BuyerProfile
-        fields = ['id', 'company_name', 'gst_number', 'contact_person', 'kyc_status']
+        fields = ['id', 'company_name', 'gst_number', 'contact_person']
         read_only_fields = ['id', 'kyc_status']
 
 
