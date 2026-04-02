@@ -16,7 +16,7 @@ class BuyerProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = BuyerProfile
         fields = ['id', 'company_name', 'gst_number', 'contact_person']
-        read_only_fields = ['id', 'kyc_status']
+        read_only_fields = ['id']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -70,6 +70,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         if role == 'farmer':
             FarmerProfile.objects.create(user=user, kyc_status='pending')
         elif role == 'buyer':
-            BuyerProfile.objects.create(user=user, kyc_status='pending')
+            BuyerProfile.objects.create(user=user)
 
         return user
