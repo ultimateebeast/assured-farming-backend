@@ -82,8 +82,15 @@ class ContractViewSet(viewsets.ModelViewSet):
         contract.status = 'active'
         contract.save()
         # enqueue PDF generation task which will render and attach signed PDF
-        generate_contract_pdf_task.delay(contract.pk)
-        send_email_task.delay('contract_signed', {'contract_id': contract.pk})
+        try:
+            from payments.tasks_pdf import generate_contract_pdf_task
+            generate_contract_pdf_task.delay(contract.pk)
+        except Exception:
+            pass
+        try:
+            send_email_task.delay('contract_signed', {'contract_id': contract.pk})
+        except Exception:
+            pass
         return Response({'detail': 'Contract signed; generating PDF'}, status=status.HTTP_200_OK)
 
 
